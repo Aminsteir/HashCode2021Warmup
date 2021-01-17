@@ -32,3 +32,11 @@ def get_score(teams):
                     ingredients.append(ingredient)
         t_s += (len(ingredients) ** 2)
     return t_s
+
+
+def time_convert(sec):
+    mins = sec // 60
+    sec = sec % 60
+    hours = mins // 60
+    mins = mins % 60
+    return int(hours), int(mins), sec

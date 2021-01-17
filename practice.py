@@ -1,7 +1,8 @@
 import os
 import random
+import time
 
-from utils import Pizza, Submission, get_score
+from utils import Pizza, Submission, get_score, time_convert
 
 
 def main(filename, lines):
@@ -33,24 +34,30 @@ def main(filename, lines):
         n_2 = min(int(r / 2), twos)
         total = n_4 + n_3 + n_2
 
-    best = Submission([[]])
-    for i in range(trials):
-        chooses = pizzas.copy()
-        teams = []
-        for j in range(total):
-            b = 4
-            if j >= n_4:
-                b = 3
-            if j >= n_4 + n_3:
-                b = 2
+    chooses = pizzas.copy()
+    teams = []
+    for j in range(total):
+        b = 4
+        if j >= n_4:
+            b = 3
+        if j >= n_4 + n_3:
+            b = 2
+        best = []
+        best_choose = chooses.copy()
+        for i in range(trials):
+            choose_left = chooses.copy()
             selected = []
             for n in range(b):
-                selected.append(chooses[0])
-                chooses.remove(chooses[0])
-                random.shuffle(chooses)
-            teams.append(selected)
-        if get_score(teams) > best.score:
-            best = Submission(teams)
+                selected.append(choose_left[0])
+                choose_left.remove(choose_left[0])
+                random.shuffle(choose_left)
+            if get_score([best]) < get_score([selected]):
+                best = selected
+                best_choose = choose_left
+        chooses = best_choose
+        teams.append(best)
+
+    best = Submission(teams)
 
     print(best.score)
 
@@ -65,7 +72,9 @@ def setup():
         if filename == 'tmp':
             continue
         with open('./inputs/{}'.format(filename), 'r') as file:
+            start = time.time()
             main(filename, file.readlines())
+            print('{} took {}'.format(filename, time_convert(time.time() - start)))
 
 
 if __name__ == '__main__':
