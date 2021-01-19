@@ -13,7 +13,7 @@ def main(filename, lines):
     for i in range(pz_avail):
         ingredients = lines[line_ctr].split()[1:]
         line_ctr += 1
-        pizzas.append(Pizza(i, ingredients))
+        pizzas.append(Pizza(i, ingredients, sorted_ing=False))
 
     # pizzas = sorted(pizzas, key=lambda d: d.ingredients, reverse=True)
 
